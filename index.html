@@ -81,7 +81,7 @@
         
         
         this.load.atlas('Coins', 'assets/texture1.png', 'assets/texture1.json');
-        this.load.atlas('mainCharacter' , 'assets/mcanim.png' , 'assets/mcanim.json')
+        this.load.atlas('mainCharacter' , 'assets/manim.png' , 'assets/manim.json')
     }
 
     function create()
@@ -94,7 +94,7 @@
        //Idle animation for the main character
 
        let mainCharacterAnimations = {};
-       var idle = this.anims.create({key: 'adventurer-idle', frames: this.anims.generateFrameNames('mainCharacter', {prefix: 'adventurer-idle-', end: 3, zeroPad: 2}), repeat: -1, frameRate: 10});
+       var idle = this.anims.create({key: 'mainCharacter', frames: this.anims.generateFrameNames('mainCharacter', {prefix: 'adventurer-idle-2-', end: 3, zeroPad: 2}), repeat: -1, frameRate: 10});
    
        // var idle = this.anims.create({key: 'slime_idle', frames: this.anims.generateFrameNames('slime', {prefix: 'slime_idle', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
        mainCharacterAnimations['idle'] = idle;
