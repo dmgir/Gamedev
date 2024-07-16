@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 
 <html>
 
@@ -81,13 +81,27 @@
         
         
         this.load.atlas('Coins', 'assets/texture1.png', 'assets/texture1.json');
+
         this.load.atlas('mainCharacter' , 'assets/manim.png' , 'assets/manim.json')
+
+        
+
+        // adding audio soon
+        this.load.audio('coin_sound', 'assets/coin_sound.wav');
+        this.load.audio('win_sound', 'assets/game_win.wav');
+        this.load.audio('jumping_sound', 'assets/jumping.wav');
+
     }
 
     function create()
     {
         //Set the background origin to be at (0, 0) or top left corner of the image rather than the center of the image asset
        let background = this.add.tileSprite(0, 0, game.scale.width, game.scale.height, 'sky').setOrigin(0, 0);
+
+       // audio
+       this.coin_sound = this.sound.add('coin_sound');
+       this.win_sound = this.sound.add('win_sound');
+       // this.jumping_sound = this.sound.add('jumping_sound');
 
        //making the spin animation for the coins
        this.anims.create({key: 'coin', frames: this.anims.generateFrameNames('Coins', {prefix: 'coin', end: 7, zeroPad: 1}), repeat: -1});
@@ -180,6 +194,7 @@
     function takecoin(mainCharacter, coin)
     {
         mainCharacter.collectedcoins++;
+        this.coin_sound.play();
         coin.disableBody(true, true); //remove that particular carrot from the game (physics and visibility)
         if (mainCharacter.collectedcoins < totalCoins)
         {
@@ -188,6 +203,7 @@
         } else
         {
           gui.setText('You Win!');
+          this.win_sound.play();
           mainCharacter.disableBody(true, false);
           guiTimer.remove(false);
         }
