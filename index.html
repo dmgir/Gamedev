@@ -78,6 +78,7 @@
     //Game Objects
     var platforms;
     var mainCharacter;
+    var scene;
     var Coins = [];
     var totalCoins = 12;
     var ghost = [];
@@ -100,13 +101,11 @@
         this.load.atlas('Coins', 'assets/texture1.png', 'assets/texture1.json');
 
 
-
         this.load.atlas('Ghosts', 'assets/ghost.png', 'assets/ghost.json')
 
 
         this.load.atlas('mainCharacter' , 'assets/manim.png' , 'assets/manim.json')
 
-        
 
         // adding audio soon
         this.load.audio('coin_sound', 'assets/coin_sound.wav');
@@ -121,6 +120,7 @@
         //Set the background origin to be at (0, 0) or top left corner of the image rather than the center of the image asset
        let background = this.add.tileSprite(0, 0, game.scale.width, game.scale.height, 'sky').setOrigin(0, 0);
 
+       scene = this;
        // audio
        this.coin_sound = this.sound.add('coin_sound');
        this.win_sound = this.sound.add('win_sound');
@@ -210,12 +210,14 @@
         if (mainCharacter.body.touching.down) {
           //If the player is on the ground, the player can jump
           mainCharacter.setVelocityY(-1100);
-          this.jumping_sound.play();
           mainCharacter.currentJumps++;
+          scene.jumping_sound.play();
+          
         } else if (mainCharacter.currentJumps < mainCharacter.totalJumps) {
           //If the player is not on the ground but has an available air jump, use that jump
           mainCharacter.setVelocityY(-800);
           mainCharacter.currentJumps++;
+          scene.jumping_sound.play();
         }
     }
 
