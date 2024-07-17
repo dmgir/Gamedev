@@ -129,6 +129,9 @@
        //making the spin animation for the coins
        this.anims.create({key: 'coin', frames: this.anims.generateFrameNames('Coins', {prefix: 'coin', end: 7, zeroPad: 1}), repeat: -1});
        this.anims.create({key: 'ghost', frames: this.anims.generateFrameNames('Ghosts', {prefix: 'ghost', end: 6, zeroPad: 1}), repeat: -1});
+       
+       
+
        //Idle animation for the main character
 
        let mainCharacterAnimations = {};
@@ -136,7 +139,10 @@
    
        // var idle = this.anims.create({key: 'slime_idle', frames: this.anims.generateFrameNames('slime', {prefix: 'slime_idle', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
        mainCharacterAnimations['idle'] = idle;
-
+       var left = this.anims.create({key: 'left', frames: this.anims.generateFrameNames('mainCharacter', {prefix: 'adventurer-run-', end: 5, zeroPad: 2}), repeat: -1});
+       mainCharacterAnimations['left'] = left;
+       var right = this.anims.create({key: 'right', frames: this.anims.generateFrameNames('mainCharacter', {prefix: 'adventurer-run-', end: 5, zeroPad: 2}), repeat: -1});
+       mainCharacterAnimations['right'] = right;
        //Create the platforms and the player character set to collide with the platforms
        createPlatforms(this);
        mainCharacter = new MainCharacter(this, 400, 400, mainCharacter, mainCharacterAnimations);
@@ -196,13 +202,20 @@
         if (cursors.left.isDown || keys.A.isDown)
         {
             mainCharacter.setVelocityX(-400);
+            mainCharacter.play(mainCharacter.animations['left'], true);
+            mainCharacter.flipX = true;
         }
 
-        if (cursors.right.isDown || keys.D.isDown)
+        else if (cursors.right.isDown || keys.D.isDown)
         {
             mainCharacter.setVelocityX(400);
+            mainCharacter.play(mainCharacter.animations['right'], true);
+            mainCharacter.flipX = false;
+
         }
+        else {
         mainCharacter.play(mainCharacter.animations['idle'], true);
+       }
     }
 
     function jump(event)
