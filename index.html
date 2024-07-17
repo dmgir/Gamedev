@@ -124,7 +124,7 @@
        // audio
        this.coin_sound = this.sound.add('coin_sound');
        this.win_sound = this.sound.add('win_sound');
-       // this.jumping_sound = this.sound.add('jumping_sound');
+       this.jumping_sound = this.sound.add('jumping_sound');
 
        //making the spin animation for the coins
        this.anims.create({key: 'coin', frames: this.anims.generateFrameNames('Coins', {prefix: 'coin', end: 7, zeroPad: 1}), repeat: -1});
@@ -213,6 +213,7 @@
         if (mainCharacter.body.touching.down) {
           //If the player is on the ground, the player can jump
           mainCharacter.setVelocityY(-1100);
+          this.jumping_sound.play();
           mainCharacter.currentJumps++;
         } else if (mainCharacter.currentJumps < mainCharacter.totalJumps) {
           //If the player is not on the ground but has an available air jump, use that jump
