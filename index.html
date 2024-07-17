@@ -64,7 +64,7 @@
             super(scene, x, y, spritesheet, animation);
             scene.add.existing(this);
             scene.physics.add.existing(this);
-            this.setScale(0.1);
+            this.setScale(0.3);
             this.play(animation);
         }
 
@@ -80,7 +80,7 @@
     var mainCharacter;
     var Coins = [];
     var totalCoins = 12;
-    var ghost = [];
+    var Ghosts = [];
     var totalghost = 2;
 
     //Keyboard controls
@@ -152,11 +152,14 @@
            myCoin.play('coin');
        }
 
-
-       let ghost = new Ghost(this, 200, 150, 'Ghosts', 'ghost');
-       ghost.addTween(this, ghost.x+200, ghost.y, 2000);
-
+       for (var i = 0; i < totalghost; i++){
+      
+          let ghost = new Ghost(this, Phaser.Math.Between(0, game.scale.width), Phaser.Math.Between(0, game.scale.height-80), 'Ghosts', 'ghost');
+          ghost.addTween(this, ghost.x+200, ghost.y, 2000);
+          Ghosts.push(ghost);
+      }
        this.physics.add.overlap(mainCharacter, Coins, takecoin, null, this);
+       this.physics.add.overlap(mainCharacter, Ghosts, takedmg, null, this);
 
        //Set up user input
        cursors = this.input.keyboard.createCursorKeys();
@@ -236,7 +239,10 @@
           guiTimer.remove(false);
         }
     }
-
+    function takedmg(mainCharacter, ghost){
+      mainCharacter.disableBody(true,true)
+    }
+    
     //Reset the gui text to be empty after the guiTimer elapses
     function removeText()
     {
