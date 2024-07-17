@@ -111,6 +111,7 @@
         this.load.audio('coin_sound', 'assets/coin_sound.wav');
         this.load.audio('win_sound', 'assets/game_win.wav');
         this.load.audio('jumping_sound', 'assets/jumping.wav');
+        this.load.audio('losing_sound', 'assets/losing.wav');
 
     }
 
@@ -124,6 +125,7 @@
        this.coin_sound = this.sound.add('coin_sound');
        this.win_sound = this.sound.add('win_sound');
        this.jumping_sound = this.sound.add('jumping_sound');
+       this.losing_sound = this.sound.add('losing_sound');
 
        //making the spin animation for the coins
        this.anims.create({key: 'coin', frames: this.anims.generateFrameNames('Coins', {prefix: 'coin', end: 7, zeroPad: 1}), repeat: -1});
@@ -256,6 +258,7 @@
     }
     function takedmg(mainCharacter, ghost){
       mainCharacter.disableBody(true,true);
+      this.losing_sound.play();
     }
     
     //Reset the gui text to be empty after the guiTimer elapses
