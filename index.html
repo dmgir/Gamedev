@@ -112,7 +112,6 @@
         this.load.audio('win_sound', 'assets/game_win.wav');
         this.load.audio('jumping_sound', 'assets/jumping.wav');
 
-
     }
 
     function create()
@@ -130,7 +129,6 @@
        this.anims.create({key: 'coin', frames: this.anims.generateFrameNames('Coins', {prefix: 'coin', end: 7, zeroPad: 1}), repeat: -1});
        this.anims.create({key: 'ghost', frames: this.anims.generateFrameNames('Ghosts', {prefix: 'ghost', end: 6, zeroPad: 1}), repeat: -1});
        
-       
 
        //Idle animation for the main character
 
@@ -143,6 +141,7 @@
        mainCharacterAnimations['left'] = left;
        var right = this.anims.create({key: 'right', frames: this.anims.generateFrameNames('mainCharacter', {prefix: 'adventurer-run-', end: 5, zeroPad: 2}), repeat: -1});
        mainCharacterAnimations['right'] = right;
+
        //Create the platforms and the player character set to collide with the platforms
        createPlatforms(this);
        mainCharacter = new MainCharacter(this, 400, 400, mainCharacter, mainCharacterAnimations);
@@ -256,7 +255,7 @@
         }
     }
     function takedmg(mainCharacter, ghost){
-      mainCharacter.disableBody(true,true)
+      mainCharacter.disableBody(true,true);
     }
     
     //Reset the gui text to be empty after the guiTimer elapses
