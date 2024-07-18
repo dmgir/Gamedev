@@ -18,6 +18,9 @@
         height: 700,
         physics: {
             default: 'arcade',
+            // arcade: {
+            //  debug: true;
+            //  }
         },
 
         scene: {
@@ -26,7 +29,7 @@
             update: update,
         }
 
-    };
+    }
 
     class MainCharacter extends Phaser.Physics.Arcade.Sprite
     {
@@ -40,7 +43,8 @@
             scene.add.existing(this);
             scene.physics.add.existing(this);
             this.setScale(2);
-            this.setCollideWorldBounds(true);
+            this.setSize(25, 35, true);
+            this.setCollideWorldBounds(false);
             this.setGravityY(3000); //We will set gravity *per object* rather than for the scene!
         }
     }
@@ -64,7 +68,7 @@
             super(scene, x, y, spritesheet, animation);
             scene.add.existing(this);
             scene.physics.add.existing(this);
-            this.setScale(0.1);
+            this.setScale(0.10);
             this.play(animation);
         }
 
@@ -82,13 +86,19 @@
     var Coins = [];
     var totalCoins = 12;
     var Ghosts = [];
-    var totalghost = 5;
+    var totalghost = 3;
+    var score = 0;
 
     //Keyboard controls
     var cursors;
     var keys;
     var space;
+    var value2 = Phaser.Math.Between(600, 700);
+    var value = Phaser.Math.Between(200, 400);
+    var value3 = Phaser.Math.Between(-100, 0);
 
+
+    var gui2;
     var gui;
     var guiTimer;
 
@@ -131,6 +141,11 @@
        this.anims.create({key: 'coin', frames: this.anims.generateFrameNames('Coins', {prefix: 'coin', end: 7, zeroPad: 1}), repeat: -1});
        this.anims.create({key: 'ghost', frames: this.anims.generateFrameNames('Ghosts', {prefix: 'ghost', end: 6, zeroPad: 1}), repeat: -1});
        
+       value2 = Phaser.Math.Between(400, 500);
+     value = Phaser.Math.Between(150, 250);
+     value3 = Phaser.Math.Between(200, 800);
+     value4 = Phaser.Math.Between(200, 800);
+
 
        //Idle animation for the main character
 
@@ -149,7 +164,7 @@
 
        //Create the platforms and the player character set to collide with the platforms
        createPlatforms(this);
-       mainCharacter = new MainCharacter(this, 400, 400, mainCharacter, mainCharacterAnimations);
+       mainCharacter = new MainCharacter(this, value2, value, mainCharacter, mainCharacterAnimations);
        this.physics.add.collider(mainCharacter, platforms);
        mainCharacter.play(mainCharacter.animations['idle']);
 
@@ -160,14 +175,15 @@
            this.physics.add.collider(myCoin, platforms);
            Coins.push(myCoin);
            myCoin.play('coin');
-       }
+       } 
 
-       for (var i = 0; i < totalghost; i++){
-      
-          let ghost = new Ghost(this, Phaser.Math.Between(0, game.scale.width), Phaser.Math.Between(0, game.scale.height-80), 'Ghosts', 'ghost');
+
+        for (var i = 0; i < totalghost; i++){
+          let ghost = new Ghost(this, Phaser.Math.Between(300, game.scale.width), Phaser.Math.Between(100, game.scale.height-80), 'Ghosts', 'ghost');
           ghost.addTween(this, ghost.x+200, ghost.y, 2000);
           Ghosts.push(ghost);
-      }
+        }
+      
        this.physics.add.overlap(mainCharacter, Coins, takecoin, null, this);
        this.physics.add.overlap(mainCharacter, Ghosts, takedmg, null, this);
 
@@ -178,6 +194,9 @@
        space.on('down', jump); //calls jump function when space is pressed
        
        gui = this.add.text(16, 16, '', {fontSize: '32px', fill: '#000'});
+       gui2 = this.add.text(1000, 16, '', {fontSize: '32px', fill: '#000'});
+        gui2.setText('Score:' + score);
+       
     }
 
     function createPlatforms(scene)
@@ -188,8 +207,8 @@
         let basePlatform = platforms.create(game.scale.width/2, game.scale.height-30, 'platform');
         basePlatform.setScale(3, 1).refreshBody(); //scales the base platform in the x axis to cover the entire floor
 
-        platforms.create(250, 350, 'platform'); //creates the upper left platform
-        platforms.create(950, 500, 'platform'); //creates the bottome right platform
+        platforms.create(value3, value2, 'platform'); //creates the upper left platform
+        platforms.create(value4, value, 'platform'); //creates the bottome right platform
     }
 
     function update()
@@ -212,6 +231,9 @@
             if (mainCharacter.body.touching.down)
               mainCharacter.play(mainCharacter.animations['left'], true);
             mainCharacter.flipX = true;
+            if (mainCharacter.x < 0){
+              mainCharacter.x = game.scale.width-25;
+            }
         }
 
         else if (cursors.right.isDown || keys.D.isDown)
@@ -219,7 +241,12 @@
             mainCharacter.setVelocityX(400);
             if (mainCharacter.body.touching.down)
               mainCharacter.play(mainCharacter.animations['right'], true);
-            mainCharacter.flipX = false;      
+            mainCharacter.flipX = false;   
+            if (mainCharacter.x > game.scale.width){
+              mainCharacter.x = 0 + 25
+
+            }
+            
         } 
         else if (keys.SPACE.isDown)
         {
@@ -243,7 +270,7 @@
     {
         if (mainCharacter.body.touching.down) {
           //If the player is on the ground, the player can jump
-          mainCharacter.setVelocityY(-1100);
+          mainCharacter.setVelocityY(-1200);
           mainCharacter.play(mainCharacter.animations['left'], false);
           mainCharacter.play(mainCharacter.animations['right'], false);
           mainCharacter.play(mainCharacter.animations['idle'], false);
@@ -256,7 +283,7 @@
 
         } else if (mainCharacter.currentJumps < mainCharacter.totalJumps) {
           //If the player is not on the ground but has an available air jump, use that jump
-          mainCharacter.setVelocityY(-800);
+          mainCharacter.setVelocityY(-1000);
           mainCharacter.currentJumps++;
           mainCharacter.play(mainCharacter.animations['hop'], true);
           scene.jumping_sound.play();
@@ -278,13 +305,24 @@
           gui.setText('You Win!');
           this.win_sound.play();
           mainCharacter.disableBody(true, false);
+          score++;
+
+
+          
           guiTimer.remove(false);
+          this.scene.restart();﻿﻿﻿﻿
+          
         }
     }
     function takedmg(mainCharacter, ghost){
       mainCharacter.disableBody(true,true);
       this.losing_sound.play();
-    }
+      score = 0;
+      for(var i = 0; i < platforms.length; i++){
+        platforms[i].destroy()
+      }
+      this.scene.restart();
+          }
     
     //Reset the gui text to be empty after the guiTimer elapses
     function removeText()
